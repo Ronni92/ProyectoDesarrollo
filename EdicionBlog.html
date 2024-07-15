@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="EdicionBlog.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">    
+    <meta name="keywords" content="Diseña, Publica, Blogs,Rápida,Sencilla,Transforma,Ideas,Contenido,Atractivo,Profesional">
+    <meta name="description" content="Diseña y publica nuevos blogs de manera rápida y sencilla. Transforma tus ideas en contenido atractivo y profesional en solo unos pocos pasos.">  
+    <meta name="author" content="AstroCode">
+    <link rel="shortcut icon" type="image/x-icon" href="Imagenes/icono.png">  
+    <title>AcademixQuest</title>
+
+</head>
+<body>
+
+    <div id="Loading">
+        <img src="Imagenes/icono.png">
+    </div>
+
+    <div id="BloqueLoading">
+        <div id="Contenedor">
+            <div id="Herramientas">
+    
+                <div id="ContenedorHerramientas">
+                    <div class="BotonesAccion">
+                        <h1 id="BotonRegresar" onclick="location.href = 'index.html'">&#60;</h1>
+                        <h1 id="BotonSiguiente">&gt;</h1>
+                    </div>                        
+        
+                    <h1 id="CrearTitulo" class="TextoHerramientas">Título</h1>
+                    <h1 id="CrearSubtitulo" class="TextoHerramientas">Subtítulo</h1>
+                    <h1 id="CrearParrafo" class="TextoHerramientas">Párrafo</h1>
+                    <h1 id="CrearImagen" class="TextoHerramientas">Imagen</h1>
+                    <h1 id="CrearVideo" class="TextoHerramientas">Cuadro de Contenido</h1>
+                    <h1 id="CrearImagenTexto" class="TextoHerramientas">Imagen - Texto</h1>
+                    <h1 id="CrearTextoImagen" class="TextoHerramientas">Texto - Imagen</h1>
+                    <h1 id="CrearWhatsApp"  style="display: none;" class="TextoHerramientas">Agregar WhatsApp</h1>
+                    <h1 id="EliminarWhatsApp" style="display: none;" class="TextoHerramientas">Eliminar WhatsApp</h1>
+    
+                    <h1 id="Eliminar" class="TextoHerramientas">Eliminar</h1>   
+                </div>
+    
+                <div id="ContenedorConfiguracion" style="display: none;">
+                    <div class="BotonesAccion">
+                        <h1 id="BotonRegresar1">&#60;</h1>
+                    </div>                        
+                    <h1 id="VistaPrevia" class="TextoHerramientas">Vista Previa</h1>
+                    <h1 id="Configuracion" class="TextoHerramientas">Configuración</h1>
+    
+                </div>
+    
+                       
+    
+            </div>
+            <div id="Contenido">
+                <input type="file" id="inputArchivo" style="display: none;">
+                <a id="WhatsApp" target="_blank" style="display: none;" class="scroll-top">
+                    <img src="Imagenes/whatsapp.png">
+                </a>
+    
+            </div>
+    
+            <div id="PanelConfiguracion">
+                
+                <div class="ConfiguracionSeparacion">
+                    <div id="ConfiguracionSeo">
+                        <h1 style="text-align: center;">Configuración SEO</h1>
+                        <h2 style="margin-bottom: 5px;">URL</h2>
+                        <input type="text" id="IngresarUrl" placeholder="Ejm: Nombre-Blog"autocomplete="off" oninput="this.value = this.value.replace(/[^a-z-A-Z0-9]/g, '');">    
+                        <h2 style="margin-bottom: 5px;">Palabras Claves</h2>
+                        <input type="text" id="IngresarPalabrasC"  placeholder="Ejm: Palabra 1, Palabra 2, Palabra 3"autocomplete="off">  
+                        <h2 style="display: none;" id="TextoIngresarWhatsApp" style="margin-bottom: 5px;">WhatsApp</h2>
+                        <input type="text" id="IngresarWhatsApp" style="display: none;" placeholder="Ejm: 593123456789"autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');">  
+                        <button id="Boton_GuardarBlog">Guardar Material</button>
+                        <button id="Boton_EliminarBlog" style="display: none;">Eliminar Material</button>
+                    </div>
+                    
+                </div>
+    
+                <div id="ConfiguracionSeparacionNovedades" class="ConfiguracionSeparacion">
+    
+                    <div id="ConfiguracionNovedades">
+                        <img id="CN_Imagen" src="Imagenes/imgblog.jpg">
+    
+                        <h2 class="CN_Configuracion" id="CN_NombreBlog" contenteditable="true">Nombre del Material</h2>
+                        <p class="CN_Configuracion" id="CN_DescripcionBlog" contenteditable="true">Descripción Breve</p>
+                    </div>
+                    
+    
+                </div>
+            </div>
+                
+        </div>
+    </div>
+
+   
+   
+    
+    <script src="Modulo.js"></script>
+
+</body>
+</html>
+
+<script type="module">    
+
+
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";       
+
+    const firebaseConfig = {
+        apiKey: window.apiKey,
+        authDomain: window.authDomain,
+        databaseURL: window.databaseURL,
+        projectId: window.projectId,
+        storageBucket: window.storageBucket,
+        messagingSenderId: window.messagingSenderId,
+        appId: window.appId,
+        measurementId: window.measurementId
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+
+    import {getDatabase,set,child,update,remove,get,push,ref,onValue  } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    const db = getDatabase();
+    const dbRef = ref(getDatabase());
+
+
+
+ //definir variables generales
+
+    var TipoElemento = "";
+    var ConteoSeccion = 0;
+    var ConteoTitulos = 0;
+    var ConteoSubtitulos = 0;
+    var ConteoParrafos = 0;
+    var ConteoImagenes = 0;
+    var ConteoVideo = 0;
+    var ConteoImagenTexto = 0;
+    var ConteoTextoImagen = 0;
+    var WhatsAppActivo = false;
+
+    var ListaImagenes = [];
+    var ListaImagenesID = []; //almacena imagenes
+
+    var ListaIdExtraidos = []; //comprueba que todos esten utilizados
+    var ListaContenidoExtraido = [];
+
+    var ConfiguracionesFinales = "";
+
+    var CNImagenBlog;
+
+    CrearSeccionSelecionada("Ultimo");
+
+
+    //Recogemos el ID pasado por la url
+    var BuscarParametro = window.location.search;
+    var ParametroUrl = new URLSearchParams(BuscarParametro);
+    var Id_Blog = ParametroUrl.get('id');
+    
+    if(Id_Blog != null){
+        ExtraerBaseDatos();
+    }
+    else{
+        document.getElementById("BloqueLoading").style.display = "inline"; //si esta vacio le quita la animacion de carga de una
+        document.getElementById("Loading").style.display = "none";
+    }
+
+     //Extraer el contenido generado con chatgpt
+    var ContenidoGPT = localStorage.getItem('ContenidoGPT');
+    if(ContenidoGPT != null){
+        var ListaContenidoChatGPT = []; //salto de linea
+        ListaContenidoChatGPT = ContenidoGPT.split('\n');
+        var NombreElemento = "";
+        var AlmacenamientoTexto = "";
+        for (let i = 0; i < ListaContenidoChatGPT.length; i++) {
+
+            if(ListaContenidoChatGPT[i].includes("[Título]") || ListaContenidoChatGPT[i].includes("[Subtítulo]") || ListaContenidoChatGPT[i].includes("[Párrafo]") ){
+                NombreElemento = ListaContenidoChatGPT[i];
+            }
+
+            else{
+
+                if(ListaContenidoChatGPT[i] != "" ){
+                    AlmacenamientoTexto = AlmacenamientoTexto + ListaContenidoChatGPT[i];
+                }
+
+                if(ListaContenidoChatGPT.length-1 == i){
+                    
+                    if(AlmacenamientoTexto != ""){
+                        if(NombreElemento.includes("[Título]")){
+                            CrearTitulo("Seccion1",AlmacenamientoTexto);                            
+                        }
+                        if(NombreElemento.includes("[Subtítulo]")){
+                            CrearSubtitulo("Seccion1",AlmacenamientoTexto);                            
+                        }
+                        if(NombreElemento.includes("[Párrafo]")){
+                            CrearParrafo("Seccion1",AlmacenamientoTexto);                            
+                        }
+                        AlmacenamientoTexto = "";
+                    }                    
+                }
+                else{
+                        
+                    if(ListaContenidoChatGPT[i+1].includes("[Título]") || ListaContenidoChatGPT[i+1].includes("[Subtítulo]") || ListaContenidoChatGPT[i+1].includes("[Párrafo]") ){
+                       
+                        if(AlmacenamientoTexto != ""){
+                            if(NombreElemento.includes("[Título]")){
+                                CrearTitulo("Seccion1",AlmacenamientoTexto);                            
+                            }
+                            if(NombreElemento.includes("[Subtítulo]")){
+                                CrearSubtitulo("Seccion1",AlmacenamientoTexto);                            
+                            }
+                            if(NombreElemento.includes("[Párrafo]")){
+                                CrearParrafo("Seccion1",AlmacenamientoTexto);                            
+                            }
+                            AlmacenamientoTexto = "";
+                        }                        
+                    }
+                    else{
+                        if(ListaContenidoChatGPT[i+1] != "" ){
+                            AlmacenamientoTexto = AlmacenamientoTexto +  "<div><br></div>";
+                        }
+                    }
+                }
+            
+            }            
+
+
+        }
+        localStorage.removeItem('ContenidoGPT');
+
+    }
+
+
+    //Llamado de cada elemento
+    document.getElementById("CrearTitulo").onclick = function(e){        
+        TipoElemento = "Titulo";     
+        VerSecciones();     
+        OcultarEliminar();         
+    }
+   
+    document.getElementById("CrearSubtitulo").onclick = function(e){        
+        TipoElemento = "Subtitulo";     
+        VerSecciones();    
+        OcultarEliminar();          
+    }
+
+    document.getElementById("CrearParrafo").onclick = function(e){        
+        TipoElemento = "Parrafo";     
+        VerSecciones();     
+        OcultarEliminar();         
+    }
+
+    document.getElementById("CrearImagen").onclick = function(e){        
+        TipoElemento = "Imagen";    
+        VerSecciones();   
+        OcultarEliminar();           
+    }
+
+    document.getElementById("CrearVideo").onclick = function(e){        
+        TipoElemento = "Video";     
+        VerSecciones();    
+        OcultarEliminar();          
+    }
+
+    document.getElementById("CrearImagenTexto").onclick = function(e){        
+        TipoElemento = "Imagen-Texto";     
+        VerSecciones();    
+        OcultarEliminar();          
+    }
+
+    document.getElementById("CrearTextoImagen").onclick = function(e){        
+        TipoElemento = "Texto-Imagen";     
+        VerSecciones();    
+        OcultarEliminar();         
+    }
+
+    document.getElementById("CrearWhatsApp").onclick = function(e){
+        document.getElementById("WhatsApp").style.display = "inline";
+        document.getElementById("EliminarWhatsApp").style.display = "block";
+        document.getElementById("CrearWhatsApp").style.display = "none";
+        WhatsAppActivo = true;
+    }
+   
+    document.getElementById("EliminarWhatsApp").onclick = function(e){
+        document.getElementById("WhatsApp").style.display = "none";
+        document.getElementById("CrearWhatsApp").style.display = "block";
+        document.getElementById("EliminarWhatsApp").style.display = "none";
+        WhatsAppActivo = false;
+    }
+
+    document.getElementById("Eliminar").onclick = function(e){    
+        Ocultar();  
+        VerEliminar();              
+    }
+
+    //Ver y ocultar las secciones
+    function VerSecciones(){
+        // Selecciona todos los elementos con la clase 'CrearElemento'
+        var elementos = document.querySelectorAll('.CrearElemento');
+
+        // Recorre cada uno de los elementos seleccionados y visualiza
+        elementos.forEach(function(elemento) {
+            elemento.style.display = 'block';
+        });
+    }
+    
+    function Ocultar(){
+        // Selecciona todos los elementos con la clase 'CrearElemento'
+        var elementos = document.querySelectorAll('.CrearElemento');
+
+        // Recorre cada uno de los elementos seleccionados y ocúltalos
+        elementos.forEach(function(elemento) {
+            elemento.style.display = 'none';
+        });     
+        
+        
+
+        var herramientas = document.querySelectorAll('.TextoHerramientas');
+        herramientas.forEach(function(el) {
+            el.classList.remove('active');
+        });
+        
+        TipoElemento = "";
+        CopiarEstilo();
+    }
+
+    function VerEliminar(){
+        // Selecciona todos los elementos con la clase 'CrearElemento'
+        var elementos = document.querySelectorAll('.Eliminar');
+
+        // Recorre cada uno de los elementos seleccionados y visualiza
+        elementos.forEach(function(elemento) {
+            elemento.style.display = 'block';
+        });
+    }
+    
+    function OcultarEliminar(){
+        // Selecciona todos los elementos con la clase 'CrearElemento'
+        var elementos = document.querySelectorAll('.Eliminar');
+
+        // Recorre cada uno de los elementos seleccionados y ocúltalos
+        elementos.forEach(function(elemento) {
+            elemento.style.display = 'none';
+        });     
+        
+        
+
+        var herramientas = document.querySelectorAll('.TextoHerramientas');
+        herramientas.forEach(function(el) {
+            el.classList.remove('active');
+        });
+        
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elementos = document.querySelectorAll('.TextoHerramientas');
+
+        elementos.forEach(function(elemento) {
+            elemento.addEventListener('click', function() {
+                elementos.forEach(function(el) {
+                    el.classList.remove('active');
+                });
+                elemento.classList.add('active');
+            });
+        });
+    });
+
+
+    //Redirigir al elemento seleccionado
+    function CrearElementos(Posicion){
+        if(TipoElemento == "Titulo"){
+            CrearTitulo(Posicion,"Título");
+        }
+        if(TipoElemento == "Subtitulo"){
+            CrearSubtitulo(Posicion,"Subtítulo");
+        }
+        if(TipoElemento == "Parrafo"){
+            CrearParrafo(Posicion,"Párrafo");
+        }
+        if(TipoElemento == "Imagen"){
+            CrearImagen(Posicion,"Imagenes/imgblog.jpg");
+        }
+        if(TipoElemento == "Video"){
+            CrearVideo(Posicion,"https://www.youtube.com/embed/w-ro1lEWDUU?si=9R5IMyiLOcKpznp-","Link");
+        }
+        if(TipoElemento == "Imagen-Texto"){
+            CrearImagenTexto(Posicion,"Imagenes/imgblog.jpg","Subtítulo","Párrafo");
+        }
+        if(TipoElemento == "Texto-Imagen"){
+            CrearTextoImagen(Posicion,"Subtítulo","Párrafo","Imagenes/imgblog.jpg");
+        }                
+    }
+
+
+    //Creamos los elementos seleccionados
+    function CrearTitulo(Posicion,TextoT){
+
+        ConteoTitulos = ConteoTitulos + 1;
+        var ID = "Titulo"+String(ConteoTitulos);
+
+        var newH1 = document.createElement("h1"); 
+        newH1.className = "editable";
+        newH1.contentEditable = 'true';
+        newH1.innerHTML = TextoT;
+        newH1.id = ID;
+
+
+        var newEliminar = document.createElement("button"); 
+        newEliminar.innerHTML = "Eliminar Título";
+        newEliminar.id = "Eliminar"+ID;
+        newEliminar.className = "Eliminar";
+        newEliminar.onclick = (function() { Eliminar(ID); });     
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newH1,ElementoAnterior);
+        ElementoAnterior.parentNode.insertBefore(newEliminar,ElementoAnterior);
+
+        CrearSeccionSelecionada(ID);
+
+
+    }
+
+    function CrearSubtitulo(Posicion,TextoS){
+
+        ConteoSubtitulos = ConteoSubtitulos + 1;
+        var ID = "Subtitulo"+String(ConteoSubtitulos);
+
+        var newH2 = document.createElement("h2"); 
+        newH2.className = "editable";
+        newH2.contentEditable = 'true';
+        newH2.innerHTML = TextoS;
+        newH2.id = ID;
+
+
+        var newEliminar = document.createElement("button"); 
+        newEliminar.innerHTML = "Eliminar Subtítulo";
+        newEliminar.id = "Eliminar"+ID;
+        newEliminar.className = "Eliminar";
+        newEliminar.onclick = (function() { Eliminar(ID); });     
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newH2,ElementoAnterior);
+        ElementoAnterior.parentNode.insertBefore(newEliminar,ElementoAnterior);
+
+        CrearSeccionSelecionada(ID);
+
+
+    }
+
+    function CrearParrafo(Posicion,TextoP){
+
+        ConteoParrafos = ConteoParrafos + 1;
+        var ID = "Parrafo"+String(ConteoParrafos);
+
+        var newH2 = document.createElement("p"); 
+        newH2.className = "editable";
+        newH2.contentEditable = 'true';
+        newH2.innerHTML = TextoP;
+        newH2.id = ID;
+
+
+        var newEliminar = document.createElement("button"); 
+        newEliminar.innerHTML = "Eliminar Párrafo";
+        newEliminar.id = "Eliminar"+ID;
+        newEliminar.className = "Eliminar";
+        newEliminar.onclick = (function() { Eliminar(ID); });     
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newH2,ElementoAnterior);
+        ElementoAnterior.parentNode.insertBefore(newEliminar,ElementoAnterior);
+
+        CrearSeccionSelecionada(ID);
+
+
+    }    
+
+    function CrearImagen(Posicion,ImagenURL){
+
+        ConteoImagenes = ConteoImagenes + 1;
+        var ID = "Imagen"+String(ConteoImagenes);
+        var newImg = document.createElement("img"); 
+        newImg.id = ID;
+        newImg.src = ImagenURL;
+        newImg.alt = "Imagen del blog";
+        newImg.onclick = (function() { SubirImagen(ID); });     
+
+
+        var newEliminar = document.createElement("button"); 
+        newEliminar.innerHTML = "Eliminar Imagen";
+        newEliminar.id = "Eliminar"+ID;
+        newEliminar.className = "Eliminar";
+        newEliminar.onclick = (function() { Eliminar(ID); });
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newImg,ElementoAnterior);
+        ElementoAnterior.parentNode.insertBefore(newEliminar,ElementoAnterior);
+
+        CrearSeccionSelecionada(ID);
+
+
+    }    
+
+
+    function CrearVideo(Posicion,EnlaceVideo,EnlaceLink){
+
+        ConteoVideo = ConteoVideo + 1;
+        var ID = "Video"+String(ConteoVideo);
+        var IDContenedor = "ContenedorVideo"+String(ConteoVideo);
+
+        var newDiv = document.createElement("div"); 
+        newDiv.id = IDContenedor;
+            var newDiv1 = document.createElement("div"); 
+            newDiv1.className = "video-container";
+
+                var newIframe = document.createElement("iframe"); 
+                newIframe.src = EnlaceVideo;
+                newIframe.frameborder = "0";
+                newIframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+                newIframe.allowfullscreen = true;
+                newIframe.id = ID;
+
+            newDiv1.appendChild(newIframe);
+
+            var newH2 = document.createElement("p"); 
+            newH2.className = "editableLink";
+            newH2.contentEditable = 'true';
+            newH2.innerHTML = EnlaceLink;
+            newH2.id = "Link"+ID;
+
+
+            var newButton = document.createElement("button"); 
+            newButton.className = "OcultarBoton";
+            newButton.innerHTML = "Validar Enlace";
+            newButton.onclick = (function() { ValidarVideo(ID); });     
+
+
+        newDiv.appendChild(newDiv1);
+        newDiv.appendChild(newH2);
+        newDiv.appendChild(newButton);
+
+        var newEliminar = document.createElement("button"); 
+        newEliminar.innerHTML = "Eliminar Cuadro de Contenido";
+        newEliminar.id = "Eliminar"+IDContenedor;
+        newEliminar.className = "Eliminar";
+        newEliminar.onclick = (function() { Eliminar(IDContenedor); });
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newDiv,ElementoAnterior);
+        ElementoAnterior.parentNode.insertBefore(newEliminar,ElementoAnterior);
+
+
+        CrearSeccionSelecionada(IDContenedor);
+    }
+
+    function CrearImagenTexto(Posicion,ImagenURL,TextoS,TextoP){
+
+        ConteoImagenTexto = ConteoImagenTexto + 1;
+        var IDImagen = "Grafico-Texto_Imagen"+String(ConteoImagenTexto);
+        var IDSubtitulo = "Grafico-Texto_Subtitulo"+String(ConteoImagenTexto);
+        var IDParrafo = "Grafico-Texto_Parrafo"+String(ConteoImagenTexto);
+        var IDContenedor = "ContenedorGrafico-Texto"+String(ConteoImagenTexto);
+
+
+        var newDiv = document.createElement("div"); 
+        newDiv.id = IDContenedor;
+        newDiv.className = "SeparacionD";
+            var newDiv1 = document.createElement("div"); 
+                   
+                var newImg = document.createElement("img"); 
+                newImg.id = IDImagen;
+                newImg.src = ImagenURL;
+                newImg.alt = "Imagen del blog";
+                newImg.onclick = (function() { SubirImagen(IDImagen); }); 
+
+            newDiv1.appendChild(newImg);
+
+          
+            var newDiv2 = document.createElement("div"); 
+            newDiv2.className = "Derecha";
+                var newH2 = document.createElement("h2"); 
+                newH2.className = "editable";
+                newH2.contentEditable = 'true';
+                newH2.innerHTML = TextoS;
+                newH2.id = IDSubtitulo;
+
+
+                var newP = document.createElement("p"); 
+                newP.className = "editable";
+                newP.contentEditable = 'true';
+                newP.innerHTML = TextoP;
+                newP.id = IDParrafo;
+
+   
+            newDiv2.appendChild(newH2);
+            newDiv2.appendChild(newP);
+
+
+        newDiv.appendChild(newDiv1);
+        newDiv.appendChild(newDiv2);
+
+
+        var newEliminar = document.createElement("button"); 
+        newEliminar.innerHTML = "Eliminar Imagen-Texto";
+        newEliminar.id = "Eliminar"+IDContenedor;
+        newEliminar.className = "Eliminar";
+        newEliminar.onclick = (function() { Eliminar(IDContenedor); });
+
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newDiv,ElementoAnterior);
+        ElementoAnterior.parentNode.insertBefore(newEliminar,ElementoAnterior);
+
+        CrearSeccionSelecionada(IDContenedor);
+
+    }    
+
+    function CrearTextoImagen(Posicion,TextoS,TextoP,ImagenURL){
+
+        ConteoTextoImagen = ConteoTextoImagen + 1;
+        var IDImagen = "Texto-Grafico_Imagen"+String(ConteoTextoImagen);
+        var IDSubtitulo = "Texto-Grafico_Subtitulo"+String(ConteoTextoImagen);
+        var IDParrafo = "Texto-Grafico_Parrafo"+String(ConteoTextoImagen);
+        var IDContenedor = "ContenedorTexto-Grafico"+String(ConteoTextoImagen);
+
+
+        var newDiv = document.createElement("div"); 
+        newDiv.id = IDContenedor;
+        newDiv.className = "SeparacionI";
+            var newDiv1 = document.createElement("div"); 
+                
+                var newImg = document.createElement("img"); 
+                newImg.id = IDImagen;
+                newImg.src = ImagenURL;
+                newImg.alt = "Imagen del blog";
+                newImg.onclick = (function() { SubirImagen(IDImagen); }); 
+
+            newDiv1.appendChild(newImg);
+
+        
+            var newDiv2 = document.createElement("div"); 
+            newDiv2.className = "Izquierda";
+                var newH2 = document.createElement("h2"); 
+                newH2.className = "editable";
+                newH2.contentEditable = 'true';
+                newH2.innerHTML = TextoS;
+                newH2.id = IDSubtitulo;
+
+
+                var newP = document.createElement("p"); 
+                newP.className = "editable";
+                newP.contentEditable = 'true';
+                newP.innerHTML = TextoP;
+                newP.id = IDParrafo;
+
+
+            newDiv2.appendChild(newH2);
+            newDiv2.appendChild(newP);
+
+            
+        newDiv.appendChild(newDiv2);
+        newDiv.appendChild(newDiv1);
+
+
+        var newEliminar = document.createElement("button"); 
+        newEliminar.innerHTML = "Eliminar Texto-Imagen";
+        newEliminar.id = "Eliminar"+IDContenedor;
+        newEliminar.className = "Eliminar";
+        newEliminar.onclick = (function() { Eliminar(IDContenedor); });
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newDiv,ElementoAnterior);
+        ElementoAnterior.parentNode.insertBefore(newEliminar,ElementoAnterior);
+
+        CrearSeccionSelecionada(IDContenedor);
+
+    }    
+
+
+
+
+
+    //Creamos las secciones complemenetos
+    function CrearSeccionSelecionada(Posicion){
+
+        ConteoSeccion = ConteoSeccion + 1; // primer conteo, no repetir ID
+        var ID ="Seccion"+String(ConteoSeccion);
+     // creamos el elemento
+        var newH1 = document.createElement("h1"); 
+        newH1.className = "CrearElemento";
+        newH1.id = ID;
+        newH1.innerHTML = "Haz clic para crear el elemento seleccionado aquí";
+        newH1.onclick = (function() { CrearElementos(ID); });  //da apertura a la funcion   
+
+        //el primero siempre este al final y vayan para arriba 
+    // la posicion es ultima se le pasa por defecto como primera al contenedor
+        if(Posicion == "Ultimo"){
+            var LeerDiv = document.getElementById("Contenido");
+            LeerDiv.appendChild(newH1);
+        }
+        // si no es ultimo le añade al elemento anterior 
+        else{
+            var ElementoAnterior = document.getElementById(Posicion);
+            ElementoAnterior.parentNode.insertBefore(newH1,ElementoAnterior);
+        }
+
+        Ocultar();
+
+    }
+
+
+    //Subimos las imagenes a la etiqueta
+    function SubirImagen(ID){
+
+
+        if(ConfiguracionesFinales != ""){
+            return;
+        }
+
+        const inputArchivo = document.getElementById('inputArchivo');
+        // Activa el input file
+        inputArchivo.click();
+
+        // Añade un event listener al input file para manejar el archivo seleccionado
+        inputArchivo.onchange = function(event) {
+            const archivo = event.target.files[0];
+
+            
+
+            if (archivo) {
+                const lector = new FileReader();
+                lector.onload = function(e) {
+                    // Cambia la src de la imagen correspondiente al ID pasado como parámetro
+                    const imagen = document.getElementById(ID);
+                    imagen.src = e.target.result;
+
+                    if(ListaImagenesID.includes(ID)){
+                        ListaImagenes[ListaImagenesID.indexOf(ID)] = 'data:image/png;base64,' +e.target.result.split(',')[1];
+                    }
+                    else{
+                        ListaImagenesID.push(ID);
+                        ListaImagenes.push('data:image/png;base64,' +e.target.result.split(',')[1]);
+                    }
+
+                };
+                lector.readAsDataURL(archivo);
+            }
+        };
+    }
+
+
+    //Validar Videos
+    function ValidarVideo(ID){
+
+        var Link = document.getElementById("Link"+ID).textContent;
+        document.getElementById(ID).src = Link;
+
+    }
+   
+    //Eliminar Elemento
+    function Eliminar(ID){
+        var elemento = document.getElementById(ID);
+        var elementoAnterior = elemento.previousElementSibling;
+
+        var boton = document.getElementById("Eliminar"+ID);
+
+        if (elemento) {
+            elementoAnterior.remove();
+            elemento.remove();
+            boton.remove();
+
+            OcultarEliminar();
+        }
+    }
+
+
+    //Para que al copiar no se quede el estilo de donde se copio se hace esto y se verifica que sea solo texto   
+    function CopiarEstilo() {
+        // Configuración para que al copiar y pegar no pierda el estilo
+        const editableHeadings = document.querySelectorAll('h1[contenteditable="true"], h2[contenteditable="true"], p[contenteditable="true"]');
+
+        editableHeadings.forEach(element => {
+            // Verificar si el evento paste ya se ha asignado antes
+            if (!element.pasteEventHandlerAssigned) {
+                // Intercepta el evento de pegado
+                element.addEventListener('paste', function(e) {
+                    e.preventDefault(); // Evita el comportamiento por defecto de pegar
+
+                    // Obtiene el texto del portapapeles
+                    const clipboardData = e.clipboardData || window.clipboardData;
+                    const text = clipboardData.getData('text/plain'); // Obtiene solo el texto plano del portapapeles
+
+                    // Verifica si el contenido del portapapeles es texto
+                    if (text && text.trim() !== '') {
+                        // Inserta el texto sin formato
+                        document.execCommand('insertHTML', false, text);
+                    }
+                });
+
+                // Marca el evento como asignado
+                element.pasteEventHandlerAssigned = true;
+            }
+        });
+}
+
+    
+
+
+    //Cambio de sección
+    document.getElementById("BotonSiguiente").onclick = function(e){     
+        ExtraerID();
+        ValidarContenido();
+    } 
+
+
+    function ExtraerID(){
+
+        var Contenedor = document.getElementById("Contenido");
+        var ElementosContenedor = Contenedor.querySelectorAll("*");
+
+        ListaIdExtraidos = [];
+
+        ElementosContenedor.forEach((elemento) => {
+            
+            if (elemento.id && ( /Titulo/i.test(elemento.id)  || /Subtitulo/i.test(elemento.id)  || /Parrafo/i.test(elemento.id)  || /Imagen/i.test(elemento.id)
+                || /LinkVideo/i.test(elemento.id) ) && !/Eliminar/i.test(elemento.id)) {
+           
+                ListaIdExtraidos.push(elemento.id);
+
+            }
+        });
+    }
+
+
+    function ValidarContenido(){
+
+
+        ListaContenidoExtraido = [];
+
+        for (let i = 0; i < ListaIdExtraidos.length; i++) {
+
+            if(ListaIdExtraidos[i].includes("Imagen")){
+                if(ListaImagenesID.length == 0){
+                    alert("Coloque todas las imágenes");
+                    return;
+                }
+                else{
+                    for (let j = 0; j < ListaImagenesID.length; j++) {
+                        if(ListaImagenesID[j] == ListaIdExtraidos[i]){
+                            ListaContenidoExtraido.push(ListaImagenes[j]);
+                            break;
+                        }
+                        if(ListaImagenesID.length-1 == j){
+                            alert("Coloque todas las imágenes");
+                            return;
+                        }                    
+                    }
+                }                   
+            }
+
+            else{
+                var Contenido = document.getElementById(ListaIdExtraidos[i]).innerHTML;
+                if(Contenido == ""){
+                    alert("Llene todos los campos");
+                    return;
+                }
+                ListaContenidoExtraido.push(Contenido);                    
+            }
+                   
+        }
+
+
+        if(ListaContenidoExtraido.length != 0){
+            SiguienteVentana();
+        }
+        else{
+            alert("Coloque al menos un elemento");
+        }
+        
+    }
+
+
+    function SiguienteVentana(){
+        document.getElementById("ContenedorHerramientas").style.display = "none";
+
+        // Selecciona todos los elementos con la clase 'editable'
+        var elementos = document.querySelectorAll('.editable');
+
+        elementos.forEach(function(elemento) {
+            elemento.style.border = '0px';
+            elemento.contentEditable = 'false';
+        }); 
+
+
+        // Selecciona todos los elementos con la clase 'OcultarBoton'
+        var elementos = document.querySelectorAll('.OcultarBoton, .editableLink');
+
+        elementos.forEach(function(elemento) {
+            elemento.style.display = "none";
+        }); 
+      
+        Ocultar();
+        OcultarEliminar();
+        document.getElementById("ContenedorConfiguracion").style.display = "inline";
+        document.getElementById('VistaPrevia').classList.add('active');
+        ConfiguracionesFinales = "Activo";
+        var WhatsApp = document.getElementById("IngresarWhatsApp").value;
+
+        if(WhatsAppActivo && WhatsApp != ""){
+            document.getElementById("WhatsApp").href = `https://api.whatsapp.com/send?phone=${WhatsApp}&text=Hola, me gustaría recibir más información. ¡Gracias!`;
+        }
+    }
+
+
+    //Regresar a herramientas
+    document.getElementById("BotonRegresar1").onclick = function(e){
+        document.getElementById("ContenedorHerramientas").style.display = "none";
+
+        // Selecciona todos los elementos con la clase 'editable'
+        var elementos = document.querySelectorAll('.editable');
+
+        elementos.forEach(function(elemento) {
+            elemento.style.border = '1px solid #ccc';
+            elemento.contentEditable = 'true';
+        }); 
+
+
+        // Selecciona todos los elementos con la clase 'OcultarBoton'
+        var elementos = document.querySelectorAll('.OcultarBoton, .editableLink');
+
+        elementos.forEach(function(elemento) {
+            elemento.style.display = "block";
+        }); 
+
+        document.getElementById("ContenedorConfiguracion").style.display = "none";
+        document.getElementById("ContenedorHerramientas").style.display = "inline";
+        document.getElementById("Contenido").style.display = "block";
+        document.getElementById("PanelConfiguracion").style.display = "none";   
+        ConfiguracionesFinales = "";
+    } 
+
+
+    //Configuracion y envio
+    document.getElementById("VistaPrevia").onclick = function(e){
+        document.getElementById("Contenido").style.display = "block";
+        document.getElementById("PanelConfiguracion").style.display = "none";        
+        var WhatsApp = document.getElementById("IngresarWhatsApp").value;
+
+        if(WhatsAppActivo && WhatsApp != ""){
+            document.getElementById("WhatsApp").href = `https://api.whatsapp.com/send?phone=${WhatsApp}&text=Hola, me gustaría recibir más información. ¡Gracias!`;
+        }
+    }
+
+    document.getElementById("Configuracion").onclick = function(e){
+        document.getElementById("Contenido").style.display = "none";
+        document.getElementById("PanelConfiguracion").style.display = "flex";     
+        
+        if(WhatsAppActivo){
+            document.getElementById("IngresarWhatsApp").style.display = "inline";
+            document.getElementById("TextoIngresarWhatsApp").style.display = "inline";
+        }
+        else{
+            document.getElementById("IngresarWhatsApp").style.display = "none";
+            document.getElementById("TextoIngresarWhatsApp").style.display = "none";
+        }
+    }
+    
+    document.getElementById("CN_Imagen").onclick = function(e){
+
+        const inputArchivo = document.getElementById('inputArchivo');
+        // Activa el input file
+        inputArchivo.click();
+
+        // Añade un event listener al input file para manejar el archivo seleccionado
+        inputArchivo.onchange = function(event) {
+            const archivo = event.target.files[0];
+
+            if (archivo) {
+                const lector = new FileReader();
+                lector.onload = function(e) {
+                    // Cambia la src de la imagen correspondiente al ID pasado como parámetro
+                    const imagen = document.getElementById("CN_Imagen");
+                    imagen.src = e.target.result;
+                    CNImagenBlog =  'data:image/png;base64,' +e.target.result.split(',')[1];                    
+                };
+                lector.readAsDataURL(archivo);
+            }
+        };
+    }
+
+    document.getElementById("Boton_GuardarBlog").onclick = function(e){
+
+        var URL = document.getElementById("IngresarUrl").value;
+        var PalabrasClaves = document.getElementById("IngresarPalabrasC").value;
+        var Nombre = document.getElementById("CN_NombreBlog").innerHTML;
+        var Descripcion = document.getElementById("CN_DescripcionBlog").innerHTML;
+        var WhatsApp = document.getElementById("IngresarWhatsApp").value;
+
+     
+        if(URL == "" || PalabrasClaves == "" || Nombre == "" || Descripcion == ""){
+            alert("Llene todos los campos");
+            return;
+        }
+
+        if(WhatsAppActivo && WhatsApp == ""){
+            alert("Ingrese su número de WhatsApp");
+            return;
+        }
+
+        if(CNImagenBlog == null){
+            alert("Coloque una imagen");
+            return;
+        }
+
+        if(!window.navigator.onLine){
+            alert("Compruebe la conexión a internet");
+            return;
+        } 
+        
+        document.getElementById("BloqueLoading").style.display = "none";
+        document.getElementById("Loading").style.display = "inline";
+        VerificarURL(URL,PalabrasClaves,Nombre,Descripcion,CNImagenBlog,WhatsApp);
+        
+    }
+
+
+    function VerificarURL(URL,PalabrasClaves,Nombre,Descripcion,CNImagenBlog,WhatsApp){
+        get(child(dbRef, "Blogs/"+URL)).then((snapshot) => {
+        if (snapshot.exists()) {
+
+            if(Id_Blog != null){
+                remove(ref(db,"Blogs/"+URL));
+                SubirConfiguracion(URL,PalabrasClaves,Nombre,Descripcion,CNImagenBlog,WhatsApp);
+            }
+            else{
+                alert("El URL ya está asociado a otro material de estudio"); 
+                document.getElementById("BloqueLoading").style.display = "inline";
+                document.getElementById("Loading").style.display = "none";
+            }
+                    
+        }
+        else{
+            SubirConfiguracion(URL,PalabrasClaves,Nombre,Descripcion,CNImagenBlog,WhatsApp);
+        }
+    
+        }).catch((error) => {
+            VerificarURL(URL,PalabrasClaves,Nombre,Descripcion,CNImagenBlog,WhatsApp);
+        });
+    }
+
+    function SubirConfiguracion(URL,PalabrasClaves,Nombre,Descripcion,ImagenGeneral,WhatsApp){
+
+
+        if(WhatsAppActivo == false){
+            WhatsApp = "";
+        }
+
+        update(ref(db,"Blogs/"+URL),{
+            Nombre:Nombre,
+            Descripcion:Descripcion,
+            PalabrasClaves:PalabrasClaves,
+            WhatsApp:WhatsApp,
+            ImagenGeneral:ImagenGeneral
+        })
+        .then(()=>{
+            SubirBaseDatos(URL,0);
+        })
+        .catch((error)=>{
+            remove(ref(db,"Blogs/"+URL)); 
+            SubirConfiguracion(URL,Nombre,Descripcion,ImagenGeneral);
+        });
+    }
+
+    function SubirBaseDatos(URL,Numero){
+
+        var Blog = ref(db, "Blogs/"+URL);     
+        
+        const nuevoPushRef = push(Blog, {
+            Tipo: ListaIdExtraidos[Numero],
+            Contenido:ListaContenidoExtraido[Numero]              
+        });
+
+        // Obtener el nombre del push generado
+        const nuevoPushKey = nuevoPushRef.key;
+
+        nuevoPushRef.then(() => {
+
+            if(ListaIdExtraidos.length - 1 == Numero){
+                alert("El material de estudio se ha publicado con éxito.");
+                window.location.href = "EdicionBlog.html?id="+URL;
+            }
+            else{
+                var Incrementador = parseInt(Numero) + 1;
+                SubirBaseDatos(URL,Incrementador)
+            }
+
+        })
+        .catch((error) => {             
+
+            remove(ref(db,"Blogs/"+URL+"/"+String(nuevoPushKey)));     
+            SubirBaseDatos(URL,Numero);
+  
+        });
+
+    }
+
+
+
+    //Extraermos los datos de la base de datos   
+    function ExtraerBaseDatos(){
+        get(child(dbRef, "Blogs/"+Id_Blog)).then((snapshot) => {
+        if (snapshot.exists()) {
+
+            var ListaIdLeidos = [];
+            document.getElementById("IngresarUrl").value = Id_Blog;
+            document.getElementById("IngresarUrl").disabled = "true";
+            document.getElementById("Boton_EliminarBlog").style.display = "inline";
+
+            const keys = Object.keys(snapshot.val());
+                keys.forEach((key) => {
+                const hijo = snapshot.val()[key];
+
+
+                if (typeof hijo === 'object') {      
+
+                    if(hijo.Tipo.includes("Grafico")){
+                        if(hijo.Tipo.includes("Grafico-Texto")){
+                            ListaIdLeidos.push(hijo.Contenido);
+                            if(ListaIdLeidos.length == 3){
+                                CrearImagenTexto("Seccion1",ListaIdLeidos[0],ListaIdLeidos[1],ListaIdLeidos[2]);
+                                ListaImagenesID.push("Grafico-Texto_Imagen"+String(ConteoImagenTexto));
+                                ListaImagenes.push(ListaIdLeidos[0]);   
+                                ListaIdLeidos = [];
+                            }                            
+                        }
+                        if(hijo.Tipo.includes("Texto-Grafico")){
+                            ListaIdLeidos.push(hijo.Contenido);
+                            if(ListaIdLeidos.length == 3){
+                                CrearTextoImagen("Seccion1",ListaIdLeidos[0],ListaIdLeidos[1],ListaIdLeidos[2]);
+                                ListaImagenesID.push("Texto-Grafico_Imagen"+String(ConteoTextoImagen));
+                                ListaImagenes.push(ListaIdLeidos[2]);
+                                ListaIdLeidos = [];
+                            }                            
+                        }
+                    }
+                    else{
+                        
+                        if(hijo.Tipo.includes("Titulo")){
+                            CrearTitulo("Seccion1",hijo.Contenido);                            
+                        }
+                        if(hijo.Tipo.includes("Subtitulo")){
+                            CrearSubtitulo("Seccion1",hijo.Contenido);                            
+                        }
+                        if(hijo.Tipo.includes("Parrafo")){
+                            CrearParrafo("Seccion1",hijo.Contenido);                            
+                        }
+                        if(hijo.Tipo.includes("Imagen")){
+                            CrearImagen("Seccion1",hijo.Contenido);    
+                            ListaImagenesID.push("Imagen"+String(ConteoImagenes));
+                            ListaImagenes.push(hijo.Contenido);                        
+                        }
+                        if(hijo.Tipo.includes("Video")){
+                            CrearVideo("Seccion1",hijo.Contenido,hijo.Contenido);                            
+                        }
+                       
+                    }
+
+                } 
+                else {
+
+                    if(key == "WhatsApp" && hijo != ""){
+                        document.getElementById("WhatsApp").style.display = "inline";
+                        document.getElementById("EliminarWhatsApp").style.display = "block";
+                        document.getElementById("CrearWhatsApp").style.display = "none";
+                        document.getElementById("IngresarWhatsApp").value = hijo;
+                        WhatsAppActivo = true;
+                    }
+                    if(key == "Nombre"){
+                        document.title = hijo;
+                        document.getElementById("CN_NombreBlog").innerHTML = hijo;
+                    }
+                    if(key == "PalabrasClaves"){
+                        let metaKeywords = document.querySelector('meta[name="keywords"]');
+                        metaKeywords.setAttribute('content', hijo);
+                        document.getElementById("IngresarPalabrasC").value = hijo;
+                    }
+                    if(key == "Descripcion"){
+                        let metaDescription = document.querySelector('meta[name="description"]');
+                        metaDescription.setAttribute('content', hijo);
+                        document.getElementById("CN_DescripcionBlog").innerHTML = hijo;
+                    }
+                    if(key == "ImagenGeneral"){
+                        CNImagenBlog = hijo;
+                        var imagen = document.getElementById("CN_Imagen").src = hijo;                        
+                    }
+                }
+                    
+            });    
+        }
+        else{
+            alert("El material de estudio con el ID "+Id_Blog+" no está registrado.");          
+        }
+    
+        }).then(()=>{
+            document.getElementById("BloqueLoading").style.display = "inline";
+            document.getElementById("Loading").style.display = "none";
+        }).catch((error) => {
+            ExtraerBaseDatos();
+        });
+    }
+
+
+    //Eliminar Blog
+    document.getElementById("Boton_EliminarBlog").onclick = function(e){
+
+        remove(ref(db,"Blogs/"+Id_Blog));
+        alert("El material de estudio ha sido eliminado correctamente");
+        window.location.href = "index.html";
+
+    }
+</script>

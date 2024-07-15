@@ -1,0 +1,153 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+html,body{
+    width: 100%;
+    height: 100%;
+    font-family: "Roboto", sans-serif;
+    background-color: #F3F4F8;
+}
+
+h1{
+    font-size: 50px;
+    margin-bottom: 10px;
+    margin-top: 30px;
+}
+h2{
+    font-size: 25px;
+    font-weight: 200;
+    margin-bottom: 10px;
+}
+
+h3{
+    font-size: 20px;
+    font-weight: 100;
+    margin-bottom: 10px;
+    text-align: left;
+}
+h4{
+    margin-left: 10px;
+    align-content: center;
+}
+
+#Contenedor{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+#Separar{
+
+    flex: 1;
+    /* align-content: center; */
+    text-align: center;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-sizing: border-box;    
+
+}
+#Separar1{
+    flex: 1.5;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-sizing: border-box;    
+    background-color: white;
+
+}
+
+textarea{
+    width: 100%;
+    min-height: 200px;
+    height: 50%;
+    background-color: #2C3346;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 10px;
+    color: white;
+    box-sizing: border-box;    
+    resize: none;
+}
+
+#Instrucciones{
+    height: 40%;
+
+}
+
+#ContenedorBotones{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.Botones{
+    cursor: pointer;
+    flex: 1;
+    border-radius: 10px;
+    border: 1px solid;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    min-width: 200px;
+}
+
+.Botones:hover{
+    background-color: #c1e5f0;
+}
+
+img{
+    width: 50px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#Titulo{
+    margin-top: 30px;
+    font-weight: bold;
+}
+button{
+    background-color: #1D6D38;
+    color: white;
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: 0px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 40px;
+    cursor: pointer;
+}
+
+#Loading{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: none;
+}
+#Loading img{
+    width: 100%;
+    height: 100%;
+    max-height: max-content;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 0px;
+}
+
+@media screen  and (max-width:970px){
+
+    #Contenedor{
+        display: inline;
+    }
+}    

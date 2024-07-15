@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>AcademixQuest</title>
+    <meta name="author" content="AstroCode">
+    <meta name="keywords" content="Diseña, Publica, Blogs,Rápida,Sencilla,Transforma,Ideas,Contenido,Atractivo,Profesional">
+    <meta name="description" content="Diseña y publica nuevos blogs de manera rápida y sencilla. Transforma tus ideas en contenido atractivo y profesional en solo unos pocos pasos.">  
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/x-icon" href="Imagenes/icono.png">  
+    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" href="assetsBlog/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assetsBlog/css/LineIcons.3.0.css" />
+    <link rel="stylesheet" href="assetsBlog/css/animate.css" />
+    <link rel="stylesheet" href="assetsBlog/css/tiny-slider.css" />
+    <link rel="stylesheet" href="assetsBlog/css/glightbox.min.css" />
+    <link rel="stylesheet" href="assetsBlog/css/main.css" />
+</head>
+
+<body>   
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- /End Preloader -->
+
+   
+
+    <!-- Start Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 offset-lg-3 col-md-12 col-12">
+                    <div class="breadcrumbs-content">
+                        <!-- <img src="assetsBlog/images/logo/img1.png"> -->
+                        <h1 class="page-title">AcademixQuest</h1>                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadcrumbs -->
+
+    <!-- Start Blog Grid Area -->
+    <section class="section blog-grid-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-12 col-12">
+                    <div class="row" id="Contenedor">        
+                   
+                    </div>    
+                </div>
+              
+            </div>
+        </div>
+    </section>
+    <!-- End Blog Grid Area -->
+
+  
+    <!-- ========================= JS here ========================= -->
+    <script src="assetsBlog/js/bootstrap.min.js"></script>
+    <script src="assetsBlog/js/wow.min.js"></script>
+    <script src="assetsBlog/js/tiny-slider.js"></script>
+    <script src="assetsBlog/js/glightbox.min.js"></script>
+    <script src="assetsBlog/js/count-up.min.js"></script>
+    <script src="assetsBlog/js/main.js"></script>
+    <script src="Modulo.js"></script>
+
+</body>
+
+</html>
+
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";       
+
+    const firebaseConfig = {
+        apiKey: window.apiKey,
+        authDomain: window.authDomain,
+        databaseURL: window.databaseURL,
+        projectId: window.projectId,
+        storageBucket: window.storageBucket,
+        messagingSenderId: window.messagingSenderId,
+        appId: window.appId,
+        measurementId: window.measurementId
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+
+    import {getDatabase,set,child,update,remove,get,push,ref,onValue  } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    const db = getDatabase();
+    const dbRef = ref(getDatabase());
+
+
+    //Leemos constantemente la base de datos
+    onValue(child(dbRef, "Blogs"), (snapshot) => {
+        if (snapshot.exists()) {
+
+            var div = document.getElementById("Contenedor");
+            // Eliminar todos los elementos hijos del div
+            while (div.firstChild) {
+                div.removeChild(div.firstChild);
+            } 
+
+
+            //Extraermos los datos de la base de datos 
+            NuevoBlog();  
+            ExtraerBaseDatos();
+        }
+        else{
+            var div = document.getElementById("Contenedor");
+            // Eliminar todos los elementos hijos del div
+            while (div.firstChild) {
+                div.removeChild(div.firstChild);
+            } 
+            NuevoBlog();  
+        } 
+    });
+
+    
+
+    function ExtraerBaseDatos(){
+        get(child(dbRef, "Blogs")).then((snapshot) => {
+        if (snapshot.exists()) {        
+
+            const keys = Object.keys(snapshot.val());
+                keys.forEach((key) => {
+                const hijo = snapshot.val()[key];
+                CrearModulos(key,hijo.ImagenGeneral,hijo.Nombre,hijo.Descripcion);        
+            });    
+        }      
+        }).catch((error) => {
+            ExtraerBaseDatos();
+        });
+    }
+
+    function CrearModulos(ID,Imagen,Nombre,Descripcion){
+        // Crear el contenedor principal
+        const colDiv = document.createElement('div');
+        colDiv.className = 'col-lg-6 col-md-6 col-12';
+
+        // Crear el contenedor del blog
+        const blogGridDiv = document.createElement('div');
+        blogGridDiv.className = 'single-blog-grid';
+
+        // Crear el contenedor de la imagen
+        const blogImgDiv = document.createElement('div');
+        blogImgDiv.className = 'blog-img';
+
+        // Crear el enlace de la imagen
+        const blogImgLink = document.createElement('a');
+
+        // Crear la imagen
+        const blogImg = document.createElement('img');
+        blogImg.src = Imagen;
+        blogImg.alt = Nombre;
+
+        // Añadir la imagen al enlace
+        blogImgLink.appendChild(blogImg);
+
+        // Añadir el enlace al contenedor de la imagen
+        blogImgDiv.appendChild(blogImgLink);
+
+        // Crear el contenido del blog
+        const blogContentDiv = document.createElement('div');
+        blogContentDiv.className = 'blog-content';        
+
+        // Crear el título del blog
+        const blogTitle = document.createElement('h4');
+        const blogTitleLink = document.createElement('a');
+        blogTitleLink.innerHTML = Nombre;
+        blogTitle.appendChild(blogTitleLink);
+
+        // Crear el párrafo del blog
+        const blogParagraph = document.createElement('p');
+        blogParagraph.innerHTML = Descripcion;
+
+        // Crear el botón
+        const buttonDiv = document.createElement('div');
+        buttonDiv.className = 'button';
+
+        const buttonLink = document.createElement('a');
+        buttonLink.href = 'MostrarBlog.html?id='+ID;
+        buttonLink.className = 'btn';
+        buttonLink.innerText = 'Ver Material';
+        buttonLink.style.marginBottom = "5px"
+
+        const salto = document.createElement('br');        
+        
+        const buttonLink1 = document.createElement('a');
+        buttonLink1.href = 'EdicionBlog.html?id='+ID;
+        buttonLink1.className = 'btn';
+        buttonLink1.innerText = 'Editar Material';
+
+        buttonDiv.appendChild(buttonLink);
+        buttonDiv.appendChild(salto);
+        buttonDiv.appendChild(buttonLink1);
+
+        // Añadir el título, párrafo y botón al contenido del blog
+        blogContentDiv.appendChild(blogTitle);
+        blogContentDiv.appendChild(blogParagraph);
+        blogContentDiv.appendChild(buttonDiv);
+
+        // Añadir la imagen y el contenido del blog al contenedor del blog
+        blogGridDiv.appendChild(blogImgDiv);
+        blogGridDiv.appendChild(blogContentDiv);
+
+        // Añadir el contenedor del blog al contenedor principal
+        colDiv.appendChild(blogGridDiv);
+
+        // Añadir el contenedor principal al elemento con id "Contenedor"
+        document.getElementById('Contenedor').appendChild(colDiv);
+    }            
+
+
+    function NuevoBlog(){
+        // Crear el contenedor principal
+        const colDiv = document.createElement('div');
+        colDiv.className = 'col-lg-6 col-md-6 col-12';
+
+        // Crear el contenedor del blog
+        const blogGridDiv = document.createElement('div');
+        blogGridDiv.className = 'single-blog-grid';
+
+        // Crear el contenedor de la imagen
+        const blogImgDiv = document.createElement('div');
+        blogImgDiv.className = 'blog-img';
+
+        // Crear el enlace de la imagen
+        const blogImgLink = document.createElement('a');
+        blogImgLink.href = 'GenerarContenido.html';
+
+        // Crear la imagen
+        const blogImg = document.createElement('img');
+        blogImg.src = "assetsBlog/images/blog/blog-1.png";
+        blogImg.alt = "Crear Blog";
+
+        // Añadir la imagen al enlace
+        blogImgLink.appendChild(blogImg);
+
+        // Añadir el enlace al contenedor de la imagen
+        blogImgDiv.appendChild(blogImgLink);
+
+        // Crear el contenido del blog
+        const blogContentDiv = document.createElement('div');
+        blogContentDiv.className = 'blog-content';        
+
+        // Crear el título del blog
+        const blogTitle = document.createElement('h4');
+        const blogTitleLink = document.createElement('a');
+        blogTitleLink.href = 'GenerarContenido.html';
+        blogTitleLink.innerHTML = "Publica y Difunde tu Nuevo Material de Estudio";
+        blogTitle.appendChild(blogTitleLink);
+
+        // Crear el párrafo del blog
+        const blogParagraph = document.createElement('p');
+        blogParagraph.innerHTML = "Diseña y publica tu nuevo material de estudio de manera rápida y sencilla. Transforma tus ideas en contenido atractivo y profesional en solo unos pocos pasos.";
+
+        // Crear el botón
+        const buttonDiv = document.createElement('div');
+        buttonDiv.className = 'button';
+
+        
+        const buttonLink = document.createElement('a');
+        buttonLink.href = 'GenerarContenido.html';
+        buttonLink.className = 'btn';
+        buttonLink.innerText = 'Crear Material';
+
+        buttonDiv.appendChild(buttonLink);
+
+        // Añadir el título, párrafo y botón al contenido del blog
+        blogContentDiv.appendChild(blogTitle);
+        blogContentDiv.appendChild(blogParagraph);
+        blogContentDiv.appendChild(buttonDiv);
+
+        // Añadir la imagen y el contenido del blog al contenedor del blog
+        blogGridDiv.appendChild(blogImgDiv);
+        blogGridDiv.appendChild(blogContentDiv);
+
+        // Añadir el contenedor del blog al contenedor principal
+        colDiv.appendChild(blogGridDiv);
+
+        // Añadir el contenedor principal al elemento con id "Contenedor"
+        document.getElementById('Contenedor').appendChild(colDiv);
+    }            
+
+
+</script>

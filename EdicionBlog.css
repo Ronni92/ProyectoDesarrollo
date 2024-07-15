@@ -1,0 +1,419 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+html,body{
+    width: 100%;
+    height: 100%;  
+    font-family: "Roboto", sans-serif;
+    background-color: #ffffff;
+}
+
+h1{
+    font-size: 30px;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 10px;
+}
+h2{
+    font-size: 25px;
+    margin-bottom: 20px;
+    text-align: left;  
+}
+p{
+    margin-bottom: 20px;
+    text-align: justify;
+    hyphens: auto;
+}
+
+img{
+    width: 100%;
+    max-height: 500px;
+    min-height: 100px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+button{
+    width: 100%;
+    height: 40px;
+    background-color: #28303D;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 35%; /* 16:9 Aspect Ratio */
+    overflow: hidden;
+    max-height: 500px; /* Altura máxima de 500px */
+    margin: auto; /* Centra el contenedor horizontalmente */
+    margin-bottom: 10px;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+#BloqueLoading{
+    display: none;
+}
+#Contenedor{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow: hidden;
+    height: 100%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+#Herramientas{
+    flex: 0.3;
+    background-color: #28303D;
+    border-radius: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    min-width: 250px;
+}
+
+.TextoHerramientas{
+    color: white;
+    background-color: #28303D;
+
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+    min-height: 50px;
+    align-content: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.TextoHerramientas:hover,
+        .TextoHerramientas.active {
+            background-color: #D4F06F;
+            color: black;
+        }
+
+.BotonesAccion{
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.BotonesAccion h1{
+    flex: 1;
+    flex: 1;
+    background-color: white;
+    border-radius: 10px;
+    text-align: center;
+}
+#BotonRegresar{
+    margin-right: 10px;
+}
+#BotonSiguiente{
+    margin-left: 10px;
+}
+
+#Contenido{
+    flex: 2;
+    overflow-y: auto;
+    box-sizing: border-box;
+    height: 100%;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 2%;
+}
+
+#PanelConfiguracion{
+    flex: 2;
+    overflow-y: auto;
+    box-sizing: border-box;
+    height: 100%;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 2%;
+    display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.ConfiguracionSeparacion{
+    flex: 1;
+    padding: 2%;
+}
+
+input{
+    width: 100%;
+    padding-bottom: 7px;
+    padding-left: 7px;
+    padding-top: 7px;
+    border-radius: 5px;
+    border-width: 1.5px;
+    margin-top: 4px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    box-sizing: border-box;
+  }
+
+  #ConfiguracionSeparacionNovedades{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+  }
+#ConfiguracionSeo{
+    min-width: 350px;
+}
+#ConfiguracionNovedades{
+    max-width: 400px;
+    min-width: 350px;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid;
+}
+.editable {
+    border: 1px solid #ccc;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 20px;
+}
+
+.editableLink{
+    border: 1px solid #ccc;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 20px;
+}
+.CN_Configuracion{
+    border: 1px solid #ccc;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 20px;
+}
+#CN_Imagen{
+    max-height: 300px;
+}
+#CN_NombreBlog{
+    font-size: 20px;
+    max-height: calc(2 * 1.2em); 
+    line-height: 1.2em; /* Establece la altura de una línea */
+    overflow: hidden; /* Oculta el contenido que desborda */
+}
+#CN_DescripcionBlog{
+    font-size: 15px;
+    max-height: calc(5 * 1.2em); 
+    line-height: 1.2em; /* Establece la altura de una línea */
+    overflow: hidden; /* Oculta el contenido que desborda */
+}
+
+.SeparacionD{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.SeparacionI{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.SeparacionD div{
+    flex: 1;
+}
+.SeparacionI div{
+    flex: 1;
+}
+
+.Izquierda{
+    margin-right: 40px;
+}
+.Derecha{
+    margin-left: 40px;
+}
+
+
+.CrearElemento{
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+    min-height: 50px;
+    align-content: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    display: none;
+}
+
+.Eliminar{
+    display: none;
+}
+
+.scroll-top {
+    width: 45px;
+    height: 45px;
+    background: #198754;
+    text-align: center;
+    line-height: 45px;
+    font-size: 20px;
+    color: #fff;
+    border-radius: 5px;
+    position: fixed;
+    bottom: 30px;
+    right: 2%;
+    margin-right: 35px;
+    z-index: 9;
+    cursor: pointer;
+    -webkit-transition: all 0.3s ease-out 0s;
+    transition: all 0.3s ease-out 0s;
+}
+.scroll-top:hover {
+    -webkit-box-shadow: 0 1rem 3rem rgba(35, 38, 45, 0.15) !important;
+    box-shadow: 0 1rem 3rem rgba(35, 38, 45, 0.15) !important;
+    -webkit-transform: translate3d(0, -5px, 0);
+    transform: translate3d(0, -5px, 0);
+    background-color: #3569d8;
+  }
+a img{
+    box-sizing: border-box;
+    padding: 5px;
+    min-height: 0px;
+}
+#Loading{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+#Loading img{
+    width: 100%;
+    height: 100%;
+    max-height: max-content;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 0px;
+}
+@media screen  and (max-width:1300px){
+
+    .video-container {
+        padding-bottom: 40%; /* 16:9 Aspect Ratio */   
+    }
+   
+   
+}    
+
+@media screen  and (max-width:1000px){
+
+    #Herramientas{      
+        height: auto;       
+        border-radius: 0px;
+       margin-bottom: 20px;
+    }
+    
+    #Contenedor{
+        display: inline;
+        padding: 0px;
+
+    }
+
+    #Contenido{
+        margin-left: 5%;
+        margin-right: 5%;      
+        overflow-y: hidden;
+        height: auto;
+    }
+
+    .SeparacionD{
+        flex-direction: column-reverse;
+        align-items: normal;
+        flex-wrap: nowrap;
+    }
+    .SeparacionI{
+        flex-direction: column;
+        align-items: normal;
+        flex-wrap: nowrap;
+    }
+
+
+    .Izquierda{
+        margin-right: 0px;
+    }
+    .Derecha{
+        margin-left: 0px;
+    }
+
+    .video-container {
+        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */   
+    }
+
+    .scroll-top {
+       
+        margin-right: 2%;
+        right: 5%;
+       
+    }
+    
+    
+   
+}   
+
+@media screen  and (max-width:800px){   
+    #PanelConfiguracion{
+        height: auto;
+    }
+} 
+
+@media screen  and (max-width:700px){
+
+    .CrearElemento{    
+        font-size: 15px;
+    }
+   
+}   
+
+@media screen  and (max-width:500px){
+
+    #PanelConfiguracion{
+        flex-direction: column;
+    }
+    #ConfiguracionNovedades{
+        min-width: 200px;      
+    }
+    #ConfiguracionSeo{
+        min-width: 200px;
+    }
+}   

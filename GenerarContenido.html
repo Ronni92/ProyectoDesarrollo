@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">    
+  <link rel="stylesheet" type="text/css" href="GenerarContenido.css">
+  <link rel="shortcut icon" type="image/x-icon" href="Imagenes/icono.png">  
+  <title>AcademixQuest</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+</head>
+<body>
+    <div id="Loading">
+        <img src="Imagenes/icono.png">
+    </div>
+    <div id="Contenedor">
+        <div id="Separar">
+            <h1>AcademixQuest</h1>
+            <h2>Tu Fuente Infinita de Preguntas y<br>Material de Estudio</h2>
+            <button onclick="location.href = 'index.html'">Ver Materiales</button>
+
+            <h3>Asegúrate de que el resumen sea más exacto y preciso incluyendo instrucciones adicionales para detallar aún más el contenido.</h3>
+            <textarea id="Instrucciones" placeholder="El contenido debe ser simple y técnico.........."></textarea>
+        </div>
+        <div id="Separar1">
+
+            <div id="ContenedorBotones">
+                <div class="Botones" id="Boton1">
+                    <img src="Imagenes/img1.png">
+                    <h4>Subir PDF</h4>
+                </div>
+                <div class="Botones" id="Boton2">
+                    <img src="Imagenes/img2.png">
+                    <h4>Subir Texto</h4>
+                </div>                
+            </div>            
+
+            //carga el pdf 
+            //le vamos a llamar luego
+            <input type="file" id="fileInput" style="display: none;" />
+            
+
+            
+            <h3 id="Titulo">Subir Texto</h3>
+            <textarea id="Texto" placeholder="Ingrese un texto o suba un PDF.........." ></textarea>
+                        
+            
+            <button id="GenerarContenido" style="margin-bottom: 5px; margin-top: 10px;">Generar Material</button>
+
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+<script type="module">
+
+  //Creamos variables generales para almacenar los contenidos y el tipo seleccionado
+  var Contenido_General = "";
+  var Contenido_GeneradoGPT = "";
+  const apiKey = 'sk-desarrollo-yfJfDtGhPH4LJsdft3ZmT3BlbkFJqZczil58fSaMNFDY7lmN'; // Reemplaza 'TU_API_KEY' con tu clave de API de OpenAI
+  const url = 'https://api.openai.com/v1/chat/completions';
+  var chunks = [];
+
+
+  document.getElementById("Boton1").onclick = function(e){    
+
+    //Deshabilitamos la edicion del textarea
+    document.getElementById("Texto").disabled = true; //desabilitamos para escribir en el campo
+    document.getElementById('fileInput').click(); //hacemos el llamado para que se abra la consola para seleccionar el pdf
+  }
+  document.getElementById("Boton2").onclick = function(e){
+    //Permite editar e ingresar mas texto
+    Contenido_General = document.getElementById("Texto").value;  
+    document.getElementById("Texto").value = Contenido_General; //pone el texto del pdf para que no se borre
+    document.getElementById("Texto").disabled = false; //habilitamos la opcion de editar
+  }
+ 
+
+  // Esperar a que el DOM se cargue completamente
+  document.addEventListener('DOMContentLoaded', function () {
+      // Obtener referencia al elemento de entrada de archivo
+      const fileInput = document.getElementById('fileInput');
+
+      // Añadir un evento de cambio al campo de entrada de archivo
+      fileInput.addEventListener('change', function (event) {
+          // Obtener el archivo seleccionado por el usuario
+          const file = event.target.files[0];
+          if (file) {
+              // Crear un lector de archivos para leer el contenido del archivo PDF
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                  // Convertir el resultado de la lectura en un Uint8Array
+                  const typedarray = new Uint8Array(e.target.result); // Uint8Array para el manejo de archivos
+
+                  // Reiniciar la variable extractedText antes de comenzar la extracción
+                  let extractedText = '';
+
+                  // Cargar el documento PDF utilizando PDF.js
+                  pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
+                      // Obtener el número de páginas del PDF
+                      const maxPages = pdf.numPages;
+
+                      // Función para extraer texto de una página específica
+                      const extractTextFromPage = function (pageNum) {
+                          return pdf.getPage(pageNum).then(function (page) {
+                              // Obtener el contenido de texto de la página
+                              return page.getTextContent().then(function (textContent) {
+                                  // Concatenar el texto de todos los elementos de la página
+                                  const pageText = textContent.items.map(item => item.str).join(' ');
+                                  extractedText += pageText + '\n';
+
+                                  // Si hay más páginas, procesar la siguiente página
+                                  if (pageNum < maxPages) {
+                                      return extractTextFromPage(pageNum + 1);
+                                  } else {
+                                      // Si no hay más páginas, devolver el texto extraído
+                                      return extractedText;
+                                  }
+                              });
+                          });
+                      };
+
+                      // Comenzar la extracción de texto desde la primera página
+                      extractTextFromPage(1).then(function (text) {
+                          // Almacenamos en Contenido General más lo anterior guardado
+                          Contenido_General = text;
+                          //Mostramos el contenido en el textarea              
+                          document.getElementById("Texto").value = text;    
+                      });
+                  });
+              };
+              // Leer el archivo PDF como un ArrayBuffer (un objeto qu representa un bloque)
+              reader.readAsArrayBuffer(file);
+          }
+      });
+  });
+
+  // Extraer contenido
+  document.getElementById("GenerarContenido").onclick = async function(e) {
+        var Instrucciones = document.getElementById("Instrucciones").value; //extrae instrucciones 
+        var Consulta = document.getElementById("Texto").value; //se extrae del texto el elemento para guardarlo si hay información añadida
+
+        
+//una condicion para saber si no esta vacio e ingresar
+        if(Consulta != ""){
+
+            document.getElementById("Loading").style.display = "inline";
+            document.getElementById("Contenedor").style.display = "none";
+ // comprueba si hay internet, si no retorna
+            if(!window.navigator.onLine){
+                alert("Compruebe la conexión a internet");
+                return;
+            } 
+
+
+// Divide la cadena 'Consulta' en un array de partes, utilizando el punto ('.') como delimitador
+            var partes = Consulta.split('.');
+            var chunkActual = ''; // Inicializa una variable 'chunkActual' como una cadena vacía
+            
+            for (let i = 0; i < partes.length; i++) {
+// Verifica si la longitud de 'chunkActual' más la longitud de la parte actual (partes[i]) más 1 (para incluir el punto)               
+                if (chunkActual.length + partes[i].length + 1 <= 1200) {
+                    chunkActual += partes[i] + '.';
+// le manda un bloque para analizarlo
+                    if(partes.length-1 == i){
+                        chunks.push(chunkActual.trim()); 
+                    }
+
+                } else {
+                    chunks.push(chunkActual.trim());
+                    chunkActual = partes[i] + '.'; // Reinicia 'chunkActual' con la parte actual 
+                }
+                
+            }
+            
+
+            
+            if(Instrucciones != ""){
+                GenerarMaterial(
+                        ". El resumen debe incluir los puntos clave y la estructura principal del texto, proporcionando una visión general pero completa de su contenido. Además, proporciona material extra para expandir el tema, como enlaces a artículos, videos relevantes y recursos adicionales que puedan ayudar a comprender mejor el contenido. "+              
+                        "Organiza el contenido utilizando exclusivamente las siguientes etiquetas: [Título], [Subtítulo], y [Párrafo] para estructurar claramente cada sección. Después de cada etiqueta, realiza un salto de línea y coloca el contenido correspondiente."+
+                        "Además, se te proporcionarán indicaciones sobre cómo debe ser el resumen, "+Instrucciones+ ".", 0
+                );
+            }
+            else{
+                GenerarMaterial(                        
+                        ". El resumen debe incluir los puntos clave y la estructura principal del texto, proporcionando una visión general pero completa de su contenido. Además, proporciona material extra para expandir el tema, como enlaces a artículos, videos relevantes y recursos adicionales que puedan ayudar a comprender mejor el contenido. "+              
+                        "Organiza el contenido utilizando exclusivamente las siguientes etiquetas: [Título], [Subtítulo], y [Párrafo] para estructurar claramente cada sección. Después de cada etiqueta, realiza un salto de línea y coloca el contenido correspondiente.", 0                         
+                );
+            }               
+            
+        }
+        else{
+            alert("Agrege un texto para realizar el material de estudio");
+            return;
+        }
+    }
+    
+  async function GenerarMaterial(Instrucciones,Numero) { //numero es para posicionar lo chunks especifico de segmento
+            
+            const data = {
+                model: 'gpt-3.5-turbo',
+                messages: [
+                    { role: 'user', content: "Genera un resumen conciso del siguiente texto: "+chunks[Numero]+Instrucciones }    
+                ],
+                max_tokens: 4000,
+                temperature: 0.5 // Puedes ajustar este valor según tus necesidades
+            };
+
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', //indica el cuerpo de la solicitud en formato json
+                    'Authorization': `Bearer ${apiKey}` //autoriza  e inserta el valor de la variable 'apikey'
+                },
+                body: JSON.stringify(data)
+            };
+
+            try {                
+                const response = await fetch(url, requestOptions);                
+                const responseData = await response.json();
+                const mensaje = responseData.choices[0].message.content; //nos muestre un resultado legible
+
+// una condicion que verifica el formato sea correcto o vuelva intentar
+                if((mensaje.includes("[Título]") && mensaje.includes("[Subtítulo]") ) || mensaje.includes("[Párrafo]")){
+                    Contenido_GeneradoGPT = Contenido_GeneradoGPT +"\n"+ mensaje;                                                            
+
+                    if(chunks.length-1 == Numero){
+
+                        localStorage.setItem('ContenidoGPT',  Contenido_GeneradoGPT);
+                        window.location.href = 'EdicionBlog.html';                 
+
+                    }
+                    else{
+                        await GenerarMaterial(Instrucciones,Numero + 1);    //await mejor versonamiento y control de errores               
+                    }
+
+
+
+                }
+                else{
+
+                  await  GenerarMaterial(Instrucciones,Numero);                   
+                }
+
+
+                
+
+            } catch (error) {
+                await GenerarMaterial(Instrucciones,Numero);                   
+            }
+        }
+
+
+</script>

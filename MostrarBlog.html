@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="MostrarBlog.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">    
+    <meta name="keywords" content="Diseña, Publica, Blogs,Rápida,Sencilla,Transforma,Ideas,Contenido,Atractivo,Profesional">
+    <meta name="description" content="Diseña y publica nuevos blogs de manera rápida y sencilla. Transforma tus ideas en contenido atractivo y profesional en solo unos pocos pasos.">  
+    <meta name="author" content="AstroCode">
+    <link rel="shortcut icon" type="image/x-icon" href="Imagenes/icono.png">  
+    <title>Mostrar Material</title>
+
+</head>
+<body>
+
+    <div id="Loading">
+        <img src="Imagenes/icono.png">
+    </div>
+
+    <div id="BloqueLoading">
+        <div id="Contenedor">   
+            <button id="GenerarBanco" >Generar Banco de Preguntas</button>     
+            <div id="Contenido">
+                <input type="file" id="inputArchivo" style="display: none;">
+                <a id="WhatsApp" target="_blank" style="display: none;" class="scroll-top">
+                    <img src="Imagenes/whatsapp.png">
+                </a>
+    
+            </div>
+     
+        </div>
+    </div>
+
+   
+   
+    
+    <script src="Modulo.js"></script>
+
+</body>
+</html>
+
+<script type="module">    
+
+
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";       
+
+    const firebaseConfig = {
+        apiKey: window.apiKey,
+        authDomain: window.authDomain,
+        databaseURL: window.databaseURL,
+        projectId: window.projectId,
+        storageBucket: window.storageBucket,
+        messagingSenderId: window.messagingSenderId,
+        appId: window.appId,
+        measurementId: window.measurementId
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+
+    import {getDatabase,set,child,update,remove,get,push,ref,onValue  } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    const db = getDatabase();
+    const dbRef = ref(getDatabase());
+
+
+
+
+
+    var TipoElemento = "";   
+
+    //Recogemos el ID pasado por la url
+    var BuscarParametro = window.location.search;
+    var ParametroUrl = new URLSearchParams(BuscarParametro);
+    var Id_Blog = ParametroUrl.get('id');
+    var AlmacenamientoTexto = "";
+    var BotonBanco = true;
+    var chunks = [];
+
+
+
+    const apiKey = 'sk-desarrollo-yfJfDtGhPH4LJsdft3ZmT3BlbkFJqZczil58fSaMNFDY7lmN'; // Reemplaza 'TU_API_KEY' con tu clave de API de OpenAI
+    const url = 'https://api.openai.com/v1/chat/completions';
+
+    if(Id_Blog != null){
+        ExtraerBaseDatos();
+    }
+    else{
+        window.location.href = "Blogs.html";
+    }
+
+
+    CrearSeccionSelecionada("Ultimo");
+
+
+
+    //Creamos los elementos seleccionados
+    function CrearTitulo(Posicion,TextoT){
+
+     
+
+        var newH1 = document.createElement("h1"); 
+        newH1.className = "editable";
+        newH1.innerHTML = TextoT;
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newH1,ElementoAnterior);
+
+    }
+
+    function CrearSubtitulo(Posicion,TextoS){
+
+
+        var newH2 = document.createElement("h2"); 
+        newH2.className = "editable";
+        newH2.innerHTML = TextoS;
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newH2,ElementoAnterior);
+
+    }
+
+    function CrearParrafo(Posicion,TextoP){
+
+        var newH2 = document.createElement("p"); 
+        newH2.className = "editable";
+        newH2.innerHTML = TextoP;
+     
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newH2,ElementoAnterior);
+
+    }    
+
+    function CrearImagen(Posicion,ImagenURL){
+
+        var newImg = document.createElement("img"); 
+        newImg.src = ImagenURL;
+        newImg.alt = "Imagen del blog";
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newImg,ElementoAnterior);
+
+    }    
+
+
+    function CrearVideo(Posicion,EnlaceVideo,EnlaceLink){
+    
+        var newDiv = document.createElement("div"); 
+            var newDiv1 = document.createElement("div"); 
+            newDiv1.className = "video-container";
+
+                var newIframe = document.createElement("iframe"); 
+                newIframe.src = EnlaceVideo;
+                newIframe.frameborder = "0";
+                newIframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+                newIframe.allowfullscreen = true;
+
+            newDiv1.appendChild(newIframe);
+
+           
+
+
+        newDiv.appendChild(newDiv1);
+
+     
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newDiv,ElementoAnterior);
+    }
+
+    function CrearImagenTexto(Posicion,ImagenURL,TextoS,TextoP){
+     
+        var newDiv = document.createElement("div"); 
+        newDiv.className = "SeparacionD";
+            var newDiv1 = document.createElement("div"); 
+                   
+                var newImg = document.createElement("img"); 
+                newImg.src = ImagenURL;
+                newImg.alt = "Imagen del blog";
+
+            newDiv1.appendChild(newImg);
+
+          
+            var newDiv2 = document.createElement("div"); 
+            newDiv2.className = "Derecha";
+                var newH2 = document.createElement("h2"); 
+                newH2.className = "editable";
+                newH2.innerHTML = TextoS;
+
+
+                var newP = document.createElement("p"); 
+                newP.className = "editable";
+                newP.innerHTML = TextoP;
+
+   
+            newDiv2.appendChild(newH2);
+            newDiv2.appendChild(newP);
+
+
+        newDiv.appendChild(newDiv1);
+        newDiv.appendChild(newDiv2);
+
+
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newDiv,ElementoAnterior);   
+
+    }    
+
+    function CrearTextoImagen(Posicion,TextoS,TextoP,ImagenURL){
+
+        var newDiv = document.createElement("div"); 
+        newDiv.className = "SeparacionI";
+            var newDiv1 = document.createElement("div"); 
+                
+                var newImg = document.createElement("img"); 
+                newImg.src = ImagenURL;
+                newImg.alt = "Imagen del blog";
+
+            newDiv1.appendChild(newImg);
+
+        
+            var newDiv2 = document.createElement("div"); 
+            newDiv2.className = "Izquierda";
+                var newH2 = document.createElement("h2"); 
+                newH2.className = "editable";
+                newH2.innerHTML = TextoS;
+
+
+                var newP = document.createElement("p"); 
+                newP.className = "editable";
+                newP.innerHTML = TextoP;
+
+
+            newDiv2.appendChild(newH2);
+            newDiv2.appendChild(newP);
+
+            
+        newDiv.appendChild(newDiv2);
+        newDiv.appendChild(newDiv1);
+
+
+
+        var ElementoAnterior = document.getElementById(Posicion);
+        ElementoAnterior.parentNode.insertBefore(newDiv,ElementoAnterior);     
+    }    
+
+    //Creamos las secciones complemenetos
+    function CrearSeccionSelecionada(Posicion){
+
+        var newH1 = document.createElement("h1"); 
+        newH1.className = "CrearElemento";
+        newH1.id = "Seccion1";
+        var LeerDiv = document.getElementById("Contenido");
+        LeerDiv.appendChild(newH1);
+      
+    }
+
+
+    //Extraermos los datos de la base de datos   
+    function ExtraerBaseDatos(){
+        get(child(dbRef, "Blogs/"+Id_Blog)).then((snapshot) => {
+        if (snapshot.exists()) {
+
+            var ListaIdLeidos = [];
+
+            const keys = Object.keys(snapshot.val());
+                keys.forEach((key) => {
+                const hijo = snapshot.val()[key];
+
+
+                if (typeof hijo === 'object') {      
+
+                    if(hijo.Tipo.includes("Grafico")){
+                        if(hijo.Tipo.includes("Grafico-Texto")){
+                            ListaIdLeidos.push(hijo.Contenido);
+                            if(ListaIdLeidos.length == 3){
+                                AlmacenamientoTexto = AlmacenamientoTexto + ListaIdLeidos[1] + "\n"+ListaIdLeidos[2] + "\n";
+
+                                CrearImagenTexto("Seccion1",ListaIdLeidos[0],ListaIdLeidos[1],ListaIdLeidos[2]);
+                                ListaIdLeidos = [];
+                            }                            
+                        }
+                        if(hijo.Tipo.includes("Texto-Grafico")){
+                            ListaIdLeidos.push(hijo.Contenido);
+                            if(ListaIdLeidos.length == 3){
+                                AlmacenamientoTexto = AlmacenamientoTexto + ListaIdLeidos[0] + "\n"+ListaIdLeidos[1] + "\n";
+
+                                CrearTextoImagen("Seccion1",ListaIdLeidos[0],ListaIdLeidos[1],ListaIdLeidos[2]);
+                                ListaIdLeidos = [];
+                            }                            
+                        }
+                    }
+                    else{
+                        
+                        if(hijo.Tipo.includes("Titulo")){
+                            AlmacenamientoTexto = AlmacenamientoTexto + hijo.Contenido + "\n";
+                            CrearTitulo("Seccion1",hijo.Contenido);                            
+                        }
+                        if(hijo.Tipo.includes("Subtitulo")){
+                            AlmacenamientoTexto = AlmacenamientoTexto + hijo.Contenido + "\n";
+                            CrearSubtitulo("Seccion1",hijo.Contenido);                            
+                        }
+                        if(hijo.Tipo.includes("Parrafo")){
+                            AlmacenamientoTexto = AlmacenamientoTexto + hijo.Contenido + "\n";
+                            CrearParrafo("Seccion1",hijo.Contenido);                            
+                        }
+                        if(hijo.Tipo.includes("Imagen")){
+                            CrearImagen("Seccion1",hijo.Contenido);                                                  
+                        }
+                        if(hijo.Tipo.includes("Video")){
+                            CrearVideo("Seccion1",hijo.Contenido,hijo.Contenido);                            
+                        }
+                       
+                    }
+
+                } 
+                else {
+
+                    if(key == "WhatsApp" && hijo != ""){
+                        document.getElementById("WhatsApp").style.display = "inline";
+                        document.getElementById("WhatsApp").href = `https://api.whatsapp.com/send?phone=${hijo}&text=Hola, me gustaría recibir más información. ¡Gracias!`;
+
+                    }
+                    if(key == "Nombre"){
+                        document.title = hijo;
+                    }
+                    if(key == "PalabrasClaves"){
+                        let metaKeywords = document.querySelector('meta[name="keywords"]');
+                        metaKeywords.setAttribute('content', hijo);
+                    }
+                    if(key == "Descripcion"){
+                        let metaDescription = document.querySelector('meta[name="description"]');
+                        metaDescription.setAttribute('content', hijo);
+                    }                  
+                }
+                    
+            });    
+        }
+        else{
+            window.location.href = "Blogs.html";
+        }
+    
+        }).then(()=>{
+            document.getElementById("BloqueLoading").style.display = "inline";
+            document.getElementById("Loading").style.display = "none";            
+        }).catch((error) => {
+            ExtraerBaseDatos();
+        });
+    }
+
+
+
+
+    document.getElementById("GenerarBanco").onclick = function(e){
+        if(BotonBanco){
+            CrearSubtitulo("Seccion1","<br>Banco de Preguntas");                            
+            BotonBanco = false;
+        }
+        alert("Generando Banco de Preguntas");
+
+        AlmacenamientoTexto = AlmacenamientoTexto.replaceAll("<div>"," ").replaceAll("<br>"," ").replaceAll("</div>"," ");
+
+        document.getElementById("BloqueLoading").style.display = "none";
+        document.getElementById("Loading").style.display = "inline";   
+
+        var partes = AlmacenamientoTexto.split('.');
+        var chunkActual = '';
+            
+
+        for (let i = 0; i < partes.length; i++) {
+                
+            if (chunkActual.length + partes[i].length + 1 <= 2500) {  // se le aumento para más texto 2500 
+                chunkActual += partes[i] + '.';
+
+                if(partes.length-1 == i){
+                    chunks.push(chunkActual.trim());
+                }
+
+            } else {
+                chunks.push(chunkActual.trim());
+                chunkActual = partes[i] + '.';
+            }
+                
+        }
+
+        GenerarMaterial(0);
+
+    }
+
+    
+    async function GenerarMaterial(Numero) {
+            
+            const data = {
+                model: 'gpt-3.5-turbo',
+                messages: [
+                    { role: 'user', content: "Genera un banco de preguntas con sus opciones de respuesta y con su respuesta correcta no puede superar los 4000 tokens. El contenido es el siguiente: "+chunks[Numero] }    
+                ],
+                max_tokens: 4000,
+                temperature: 0.5 // Puedes ajustar este valor según tus necesidades
+            };
+
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify(data)
+            };
+
+            try {                
+                const response = await fetch(url, requestOptions);                
+                const responseData = await response.json();
+                const mensaje = responseData.choices[0].message.content;
+
+
+
+
+                CrearParrafo("Seccion1",mensaje.replaceAll("\n","<br>"));                            
+                
+                 //cuando es correcto el chunk 
+                if(chunks.length-1 == Numero){
+                    document.getElementById("BloqueLoading").style.display = "inline";
+                    document.getElementById("Loading").style.display = "none";   
+                   //muestra lo que ya se hizo
+                    window.scrollTo({
+                        top: document.body.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }
+                else{
+                    await GenerarMaterial(Numero + 1);  //si es correcto se aumenta +1              
+                }
+                
+            } catch (error) {
+                await GenerarMaterial(Numero);    //no es correcto se mantiene el numero y se crea el bucle               
+            }
+    }
+
+
+</script>
